@@ -6,10 +6,10 @@ const Chart = props => {
     labels: props.xAxis,
     datasets: [
       {
-        label: "Statistics",
+        label: props.label,
         data: props.yAxis,
         fill: true, // Fill area under the line
-        borderColor: "green" // Line color
+        borderColor: "#1890ff" // Line color
       }
     ]
   };

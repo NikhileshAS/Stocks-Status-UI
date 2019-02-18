@@ -16,9 +16,27 @@ export const stockDataFetched = stocks => {
     payload: stocks
   };
 };
+
+export const everydayStockDataFetched = stocks => {
+  return {
+    type: actions.FETCH_DAILY_STOCK_DATA,
+    payload: stocks
+  };
+};
+
+export const startDailyStockFetch = () => {
+  return {
+    type: actions.START_DAILY_FETCH_STOCK_DATA
+  };
+};
+
+export const stopDailyStockFetch = () => {
+  return { type: actions.STOP_DAILY_FETCH_STOCK_DATA };
+};
 export const fetchStockFromAPI = title => {
   return dispatch => {
     dispatch(startStockFetch());
+    dispatch(startDailyStockFetch());
     time_series_instance
       .get(
         "query?function=TIME_SERIES_DAILY&symbol=" +
@@ -29,6 +47,18 @@ export const fetchStockFromAPI = title => {
       .then(response => {
         dispatch(stockDataFetched(response.data));
         dispatch(stopStockFetch());
+      });
+
+    time_series_instance
+      .get(
+        "query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=" +
+          title +
+          "&apikey=" +
+          API_KEY
+      )
+      .then(response => {
+        dispatch(everydayStockDataFetched(response.data));
+        dispatch(stopDailyStockFetch());
       });
   };
 };
