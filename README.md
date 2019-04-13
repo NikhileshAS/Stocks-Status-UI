@@ -1,3 +1,3 @@
-npm install
-npm start
-localhost:3000
+1. npm install
+2. npm start
+3. localhost:3000
