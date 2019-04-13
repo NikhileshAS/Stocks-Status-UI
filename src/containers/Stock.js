@@ -5,13 +5,11 @@ import Chart from "../components/Chart/StockChart";
 import { Row, Col } from "antd";
 class Stock extends Component {
   render() {
-    console.log(this.props.daily_stock);
-
     return this.props.loading || this.props.daily_stock_loading ? (
       <Loading />
     ) : this.props.shouldLoad ? (
-      <Row gutter={16} justify="center">
-        <Col xs={8} lg={12} md={11}>
+      <Row gutter={{ sm: 16, md: 24 }} type="flex" justify="center">
+        <Col xs={16} lg={12} md={11}>
           <Chart
             label="This Season"
             xAxis={
@@ -33,7 +31,7 @@ class Stock extends Component {
             }
           />
         </Col>
-        <Col xs={8} lg={12} md={11}>
+        <Col xs={16} lg={12} md={11}>
           <Chart
             label="This day"
             xAxis={
@@ -60,7 +58,9 @@ class Stock extends Component {
           />
         </Col>
       </Row>
-    ) : null;
+    ) : (
+      <h2>Click on any company to view stats</h2>
+    );
   }
 }
 const mapStateToProps = state => {

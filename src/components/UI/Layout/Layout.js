@@ -1,7 +1,7 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Button, Drawer, List } from "antd";
 import "antd/dist/antd.css";
 import React, { Component } from "react";
-
+import MediaQuery from "react-responsive";
 import { connect } from "react-redux";
 import { fetchStockFromAPI } from "../../../store/actions/stocks";
 
@@ -21,59 +21,113 @@ const mapTitleToTicker = {
 };
 
 class CustomLayout extends Component {
+  state = {
+    visible: false
+  };
+  onClose = () => {
+    this.setState(prevState => {
+      return {
+        visible: !prevState.visible
+      };
+    });
+  };
   render() {
-    console.log(
-      this.props.daily_stock_loading,
-      this.props.monthly_stock_loading
-    );
     return (
-      <Layout>
-        <Header className="header">
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={["1"]}
-            style={{ lineHeight: "64px" }}
-          >
-            <Menu.Item key="1">View Stock Info</Menu.Item>
-          </Menu>
-        </Header>
-        <Layout>
-          <Sider width={200} style={{ background: "#fff" }}>
-            <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
-              {this.props.stocks.map((stock, index) => {
-                return (
-                  <Menu.Item
-                    disabled={
-                      this.props.daily_stock_loading ||
-                      this.props.monthly_stock_loading ||
-                      false
-                    }
-                    key={index}
-                    onClick={() =>
-                      this.props.onFetchStockData(mapTitleToTicker[stock.title])
-                    }
-                  >
-                    {stock.title}
-                  </Menu.Item>
-                );
-              })}
+      <React.Fragment>
+        <Layout style={{ paddingBottom: 20 }}>
+          <Header style={{ display: "flex", flexDirection: "row" }}>
+            <MediaQuery maxWidth={1151}>
+              <Button
+                type="primary"
+                style={{ margin: 20 }}
+                onClick={this.onClose}
+              >
+                SLIDE
+              </Button>
+            </MediaQuery>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={["1"]}
+              style={{ lineHeight: "64px" }}
+            >
+              <Menu.Item key="1">View Stock Info</Menu.Item>
             </Menu>
-          </Sider>
-          <Layout style={{ padding: "0 24px 24px" }}>
+          </Header>
+        </Layout>
+        <Layout>
+          <MediaQuery minWidth={1152}>
+            <Sider collapsible width={200} style={{ background: "#fff" }}>
+              <List mode="inline" style={{ height: "100%", borderRight: 0 }}>
+                {this.props.stocks.map((stock, index) => {
+                  return (
+                    <List.Item
+                      disabled={
+                        this.props.daily_stock_loading ||
+                        this.props.monthly_stock_loading ||
+                        false
+                      }
+                      key={index}
+                      onClick={() =>
+                        this.props.onFetchStockData(
+                          mapTitleToTicker[stock.title]
+                        )
+                      }
+                    >
+                      {stock.title}
+                    </List.Item>
+                  );
+                })}
+              </List>
+            </Sider>
+          </MediaQuery>
+          <MediaQuery maxWidth={1152}>
+            <Drawer
+              title="Choose Company"
+              enableDragHandle
+              placement="bottom"
+              closable={false}
+              onClose={this.onClose}
+              visible={this.state.visible}
+            >
+              <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
+                {this.props.stocks.map((stock, index) => {
+                  return (
+                    <Menu.Item
+                      disabled={
+                        this.props.daily_stock_loading ||
+                        this.props.monthly_stock_loading ||
+                        false
+                      }
+                      key={index}
+                      onClick={() =>
+                        this.props.onFetchStockData(
+                          mapTitleToTicker[stock.title]
+                        )
+                      }
+                    >
+                      {stock.title}
+                    </Menu.Item>
+                  );
+                })}
+              </Menu>
+            </Drawer>
+          </MediaQuery>
+
+          <Layout style={{ padding: "0 24px 24px 24px" }}>
             <Content
               style={{
                 background: "#fff",
                 padding: 24,
                 margin: 0,
-                minHeight: 280
+                height: "100%"
               }}
             >
               {this.props.children}
             </Content>
           </Layout>
         </Layout>
-      </Layout>
+      </React.Fragment>
     );
   }
 }
