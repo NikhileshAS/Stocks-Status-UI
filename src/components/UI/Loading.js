@@ -1,7 +1,7 @@
-import { Button } from "antd";
+import { Spin } from "antd";
 import React from "react";
 const Loading = () => {
-  return <Button type="primary" shape="circle" loading />;
+  return <Spin tip="Fetching..." />;
 };
 
 export default Loading;

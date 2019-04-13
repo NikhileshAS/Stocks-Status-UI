@@ -29,7 +29,6 @@ class CustomLayout extends Component {
     return (
       <Layout>
         <Header className="header">
-          <div className="logo" />
           <Menu
             theme="dark"
             mode="horizontal"
