@@ -20,8 +20,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  // console.log(state);
-
   switch (action.type) {
     case actions.FETCH_DAILY_STOCK_DATA:
       // console.log(action.payload);

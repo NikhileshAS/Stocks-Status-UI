@@ -22,6 +22,10 @@ const mapTitleToTicker = {
 
 class CustomLayout extends Component {
   render() {
+    console.log(
+      this.props.daily_stock_loading,
+      this.props.monthly_stock_loading
+    );
     return (
       <Layout>
         <Header className="header">
@@ -41,6 +45,11 @@ class CustomLayout extends Component {
               {this.props.stocks.map((stock, index) => {
                 return (
                   <Menu.Item
+                    disabled={
+                      this.props.daily_stock_loading ||
+                      this.props.monthly_stock_loading ||
+                      false
+                    }
                     key={index}
                     onClick={() =>
                       this.props.onFetchStockData(mapTitleToTicker[stock.title])
@@ -72,7 +81,9 @@ class CustomLayout extends Component {
 
 const mapStateToProps = state => {
   return {
-    stocks: state.items
+    stocks: state.items,
+    daily_stock_loading: state.daily_stock_loading,
+    monthly_stock_loading: state.monthly_stock_loading
   };
 };
 
