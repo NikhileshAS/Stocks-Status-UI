@@ -57,11 +57,16 @@ class CustomLayout extends Component {
         </Layout>
         <Layout>
           <MediaQuery minWidth={1152}>
-            <Sider collapsible width={200} style={{ background: "#fff" }}>
-              <List mode="inline" style={{ height: "100%", borderRight: 0 }}>
+            <Sider
+              collapsible
+              collapsedWidth={100}
+              width={200}
+              style={{ background: "#fff" }}
+            >
+              <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
                 {this.props.stocks.map((stock, index) => {
                   return (
-                    <List.Item
+                    <Menu.Item
                       disabled={
                         this.props.daily_stock_loading ||
                         this.props.monthly_stock_loading ||
@@ -75,16 +80,17 @@ class CustomLayout extends Component {
                       }
                     >
                       {stock.title}
-                    </List.Item>
+                    </Menu.Item>
                   );
                 })}
-              </List>
+              </Menu>
             </Sider>
           </MediaQuery>
           <MediaQuery maxWidth={1152}>
             <Drawer
               title="Choose Company"
               enableDragHandle
+              height={550}
               placement="bottom"
               closable={false}
               onClose={this.onClose}
