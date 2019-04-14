@@ -1,4 +1,4 @@
-import { Layout, Menu, Button, Drawer, List } from "antd";
+import { Layout, Menu, Button, Drawer } from "antd";
 import "antd/dist/antd.css";
 import React, { Component } from "react";
 import MediaQuery from "react-responsive";
@@ -45,14 +45,18 @@ class CustomLayout extends Component {
                 SLIDE
               </Button>
             </MediaQuery>
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["1"]}
-              style={{ lineHeight: "64px" }}
-            >
-              <Menu.Item key="1">View Stock Info</Menu.Item>
-            </Menu>
+            <h2 style={{ color: "white", flex: 1 }}>View Stock Info</h2>
+            <MediaQuery minWidth={1152}>
+              <Button
+                style={{ marginTop: 20, marginBottom: 30 }}
+                size={24}
+                icon="search"
+                ghost
+                shape="round"
+              >
+                Search with Ticker
+              </Button>
+            </MediaQuery>
           </Header>
         </Layout>
         <Layout>
