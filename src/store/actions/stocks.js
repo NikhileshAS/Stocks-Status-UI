@@ -51,14 +51,43 @@ export const fetchStockFromAPI = title => {
 
     time_series_instance
       .get(
-        "query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=" +
-          title +
-          "&apikey=" +
-          API_KEY
+        `query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=${title}&apikey=${API_KEY}`
       )
       .then(response => {
         dispatch(everydayStockDataFetched(response.data));
         dispatch(stopDailyStockFetch());
       });
+  };
+};
+
+export const startSearchStock = () => {
+  return {
+    type: actions.START_SEARCH_STOCK_DATA
+  };
+};
+export const stopSearchStock = () => {
+  return {
+    type: actions.STOP_SEARCH_STOCK_DATA
+  };
+};
+export const searchStockFetched = stocks => {
+  return {
+    type: actions.FETCH_SEARCH_STOCK_DATA,
+    payload: stocks
+  };
+};
+export const stopChartDisplay = () => {
+  return { type: actions.STOP_CHART_DISPLAY };
+};
+export const fetchTickerStock = keyword => {
+  return dispatch => {
+    dispatch(startSearchStock());
+    time_series_instance
+      .get(`query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=${API_KEY}`)
+      .then(response => {
+        dispatch(searchStockFetched(response.data));
+        dispatch(stopSearchStock());
+      })
+      .catch(error => console.log(error));
   };
 };

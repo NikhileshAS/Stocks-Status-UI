@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Row, Col } from "antd";
+
 import Loading from "../components/UI/Loading";
 import Chart from "../components/Chart/StockChart";
-import { Row, Col } from "antd";
+import List from "../components/UI/List";
+
 class Stock extends Component {
   render() {
-    return this.props.loading || this.props.daily_stock_loading ? (
+    return this.props.loading ||
+      this.props.daily_stock_loading ||
+      this.props.search_stock_loading ? (
       <Loading />
     ) : this.props.shouldLoad ? (
       <Row gutter={{ sm: 16, md: 24 }} type="flex" justify="center">
@@ -58,18 +63,23 @@ class Stock extends Component {
           />
         </Col>
       </Row>
+    ) : this.props.search_stock ? (
+      <List data={this.props.search_stock} />
     ) : (
       <h2>Click on any company to view stats</h2>
     );
   }
 }
+
 const mapStateToProps = state => {
   return {
     stock: state.monthly_stock,
     daily_stock: state.daily_stock,
     loading: state.monthly_stock_loading,
     daily_stock_loading: state.daily_stock_loading,
-    shouldLoad: state.shouldLoad
+    shouldLoad: state.shouldLoad,
+    search_stock: state.search_stock,
+    search_stock_loading: state.search_stock_loading
   };
 };
 

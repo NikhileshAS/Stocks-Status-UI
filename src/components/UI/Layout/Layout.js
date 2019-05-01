@@ -1,11 +1,16 @@
-import { Layout, Menu, Button, Drawer } from "antd";
+import { Layout, Menu, Button, Drawer, Input } from "antd";
 import "antd/dist/antd.css";
 import React, { Component } from "react";
 import MediaQuery from "react-responsive";
 import { connect } from "react-redux";
-import { fetchStockFromAPI } from "../../../store/actions/stocks";
+import {
+  fetchStockFromAPI,
+  fetchTickerStock,
+  stopChartDisplay
+} from "../../../store/actions/stocks";
 
 const { Header, Content, Sider } = Layout;
+const { Search } = Input;
 
 const mapTitleToTicker = {
   AMAZON: "AMZN",
@@ -47,15 +52,17 @@ class CustomLayout extends Component {
             </MediaQuery>
             <h2 style={{ color: "white", flex: 1 }}>View Stock Info</h2>
             <MediaQuery minWidth={1152}>
-              <Button
-                style={{ marginTop: 20, marginBottom: 30 }}
-                size={24}
-                icon="search"
-                ghost
-                shape="round"
-              >
-                Search with Ticker
-              </Button>
+              <Search
+                style={{ padding: 20, width: 500 }}
+                size="small"
+                disabled={this.props.search_stock_loading}
+                placeholder="Search"
+                onSearch={value => {
+                  this.props.onSearchStockData(value);
+                  this.props.stopChartDisplay();
+                }}
+                enterButton
+              />
             </MediaQuery>
           </Header>
         </Layout>
@@ -146,13 +153,16 @@ const mapStateToProps = state => {
   return {
     stocks: state.items,
     daily_stock_loading: state.daily_stock_loading,
-    monthly_stock_loading: state.monthly_stock_loading
+    monthly_stock_loading: state.monthly_stock_loading,
+    search_stock_loading: state.search_stock_loading
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchStockData: title => dispatch(fetchStockFromAPI(title))
+    onFetchStockData: title => dispatch(fetchStockFromAPI(title)),
+    onSearchStockData: keyword => dispatch(fetchTickerStock(keyword)),
+    stopChartDisplay: () => dispatch(stopChartDisplay())
   };
 };
 
